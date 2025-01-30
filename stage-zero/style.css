@@ -61,7 +61,7 @@ body {
     display: block;
     position: relative;
     flex: 1;
-    background-image: url('./assets/profile-pics.jpeg');
+    /* background-image: url('./assets/profile-pics.jpeg'); */
     /* Corrected image path */
     background-size: cover;
     /* This will make the background scale properly */
