@@ -61,6 +61,7 @@ body {
     display: block;
     position: relative;
     flex: 1;
+    
     /* background-image: url('./assets/profile-pics.jpeg'); */
     /* Corrected image path */
     background-size: cover;
@@ -79,6 +80,13 @@ body {
     /* Ensure it takes full width */
     overflow: hidden;
     /* Prevents any overflow of the background image */
+}
+.profile-image{
+    width: 100%;
+    /* background-color: red; */
+}
+img{
+
 }
 
 @media screen and (min-width:768px) {
@@ -130,7 +138,7 @@ body {
 @media screen and (min-width:1240px) {
     .profile-bio {
         position: absolute;
-        top: 40%;
+        top: 10%;
         left: 25%;
         text-align: center;
     
