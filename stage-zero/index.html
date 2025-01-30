@@ -20,7 +20,7 @@
         <div data-testid="profilePicture" class="profile-container">
 
             <div class="profile-bio">
-                <h2>Oke Kolawole</h2>
+                <h2 data-testid="fullName">Oke Kolawole</h2>
                 <h5 data-testid="jobTitle" class="job-title">Frontend Developer</h5>
                 <p data-testid="emailAddress">oke.kolawole@example.com</p>
 
@@ -31,6 +31,14 @@
         </div>
 
         <div class="profile-info">
+           
+            <p data-testid="currentLocation">Lagos, Nigeria</p>
+            <p data-testid="shortBio"></p>
+            <p data-testid="currentTimeUTC"></p>
+            <!-- <p data-testid="shortBio">
+              I’m a passionate Frontend Developer with a focus on creating user-friendly applications. With experience in React, Redux, and other modern technologies, I’m committed to building high-quality user interfaces that enhance the user experience.
+            </p> -->
+
             <ul data-testid="socialLinks" class="social-link">
               <li class="logo"><a href="https://www.linkedin.com/in/kolawole-sunday-oke-38b1871a3/" target="_blank" rel="noopener noreferrer">
                 <img class="icon" src="./assets//linkedin.svg"/><span> LinkedIn </span></a>
@@ -47,11 +55,6 @@
               </a>
             </li>
             </ul>
-            <p data-testid="currentLocation">Lagos, Nigeria</p>
-            <p data-testid="currentTimeUTC"></p>
-            <!-- <p data-testid="shortBio">
-              I’m a passionate Frontend Developer with a focus on creating user-friendly applications. With experience in React, Redux, and other modern technologies, I’m committed to building high-quality user interfaces that enhance the user experience.
-            </p> -->
           </div>
 
     </div>
