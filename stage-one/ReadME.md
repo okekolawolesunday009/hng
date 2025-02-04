@@ -1,153 +1,214 @@
 
-# DevOps Stage 1 Task
+# Number Classification API
 
 ## Overview
-This project is part of the DevOps Stage 1 task, utilizing Python to automate and streamline processes within a DevOps workflow. The goal is to demonstrate foundational DevOps principles by integrating scripting, automation, and infrastructure management. This task helps to solidify skills related to continuous integration, automation, and infrastructure as code (IaC).
-
-In this project, we’ll automate tasks using Python scripts, set up infrastructure through code, ensure smooth CI/CD pipelines, and monitor/log system performance for easier debugging and efficiency.
+This project involves creating an API that classifies a given number based on its mathematical properties, including whether it is prime, perfect, and Armstrong, as well as its digit sum. The API also returns a fun fact related to the number. This API will be deployed to a publicly accessible endpoint and handle Cross-Origin Resource Sharing (CORS) to allow interaction from different origins.
 
 ## Features
-- **Automation**: Implements Python scripts to simplify repetitive and manual tasks, reducing human error and increasing efficiency.
-- **Infrastructure as Code (IaC)**: Uses scripts to manage infrastructure, enabling version control and easier deployment.
-- **Continuous Integration/Continuous Deployment (CI/CD)**: Provides a basic framework for automating software delivery pipelines.
-- **Monitoring & Logging**: Logs crucial system events and metrics to provide visibility into system performance and help identify potential issues early.
+- **Number Classification**: Classifies numbers as prime, perfect, Armstrong, odd, or even.
+- **Fun Facts**: Integrates with the Numbers API to provide a fun fact related to the number.
+- **CORS Support**: Allows the API to be accessed from any domain.
+- **JSON Response**: Provides results in a structured JSON format.
 
 ## Technologies Used
-- **Python**: Core scripting language for task automation, management, and integration.
-- **Bash**: Shell scripting to enhance the workflow and automate server-side tasks.
-- **Docker (Optional)**: Containerization for consistent deployment across different environments.
-- **Git & GitHub**: Version control for collaboration, code management, and monitoring changes in the project.
-- **NGINX**: Reverse proxy and load balancing server to manage incoming traffic and distribute it to backend services.
-- **CI/CD Tools (Optional)**: Tools like Jenkins, GitLab CI, or GitHub Actions can be integrated for automated testing and deployment.
+- **Programming Language**: Python (or any language of your choice)
+- **Framework**: Flask or Express (depending on the language selected)
+- **Deployment**: The API will be deployed to a publicly accessible endpoint (e.g., Heroku, AWS, or any other platform).
+- **CORS**: Handles Cross-Origin Resource Sharing for public accessibility.
+- **Version Control**: Git and GitHub
+- **Web Server**: Nginx (for reverse proxy and load balancing)
+
+## API Specification
+
+### Endpoint
+**GET** `<your-url>/api/classify-number?number=371`
+
+### Response Format
+
+#### Success Response (200 OK)
+```json
+{
+    "number": 371,
+    "is_prime": false,
+    "is_perfect": false,
+    "properties": ["armstrong", "odd"],
+    "digit_sum": 11,
+    "fun_fact": "371 is an Armstrong number because 3^3 + 7^3 + 1^3 = 371"
+}
+```
+
+#### Error Response (400 Bad Request)
+```json
+{
+    "number": "alphabet",
+    "error": true
+}
+```
+
+### Properties Field Combinations
+The `properties` array will contain the following combinations based on the classification of the number:
+- `["armstrong", "odd"]` - If the number is both an Armstrong number and odd.
+- `["armstrong", "even"]` - If the number is both an Armstrong number and even.
+- `["odd"]` - If the number is not an Armstrong number but is odd.
+- `["even"]` - If the number is not an Armstrong number but is even.
+
+### Fun Fact
+The fun fact is retrieved using the Numbers API:
+- You can call the Numbers API to get a fun fact about the number, e.g., `http://numbersapi.com/<number>/math`.
 
 ## Setup & Installation
-### Prerequisites
-Before running the project, ensure the following dependencies are installed:
-- Python 3.x
-- Git
-- NGINX (for reverse proxy configuration)
-- Docker (optional for containerization)
-- A virtual environment tool (optional but recommended)
 
-### Steps
+### Prerequisites
+Ensure you have the following tools installed:
+- **Python 3.x** (or a similar environment based on your choice of language)
+- **Flask** (for Python-based API) or **Express** (for JavaScript-based API)
+- **Git** (for version control)
+- **Postman or similar** (for API testing)
+- **CORS middleware** (to handle Cross-Origin requests)
+
+### Steps to Set Up
+
 1. Clone the repository:
-   ```sh
+   ```bash
    git clone <repository-url>
    cd <project-directory>
    ```
-   
-2. Set up a virtual environment (optional but recommended):
-   ```sh
+
+2. Install dependencies:
+   If using Python:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   If using Node.js:
+   ```bash
+   npm install
+   ```
+
+3. Set up a virtual environment (Python):
+   ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use: venv\Scripts\activate
    ```
 
-3. Install required dependencies:
-   ```sh
-   pip install -r requirements.txt
+4. Run the API:
+   For Flask:
+   ```bash
+   python app.py
    ```
 
-4. Configure the `config.yaml` file (if applicable):
-   - Update any environment-specific variables or configurations as necessary.
-
-5. Run the Python script:
-   ```sh
-   python main.py
+   For Express:
+   ```bash
+   npm start
    ```
 
-## NGINX Configuration
-To set up reverse proxy with NGINX for your Python app, follow these steps:
+5. Access the API at `http://<your-server-ip>:<port>/api/classify-number?number=<your-number>`
 
-### Edit the NGINX Configuration
-1. Open your NGINX configuration file (`/etc/nginx/sites-available/default` or `/etc/nginx/nginx.conf`).
-   
-2. Add the following server block to set up a reverse proxy:
+## Nginx Configuration
+
+If you're using Nginx to reverse proxy the API, here's an example of an Nginx configuration file (`/etc/nginx/sites-available/default` or similar):
 
 ```nginx
 server {
     listen 80;
-    server_name 54.165.204.226;  # Replace with your server's IP address
+    server_name 54.165.204.226;  # Replace with your domain or IP address
 
     location / {
-        proxy_pass http://127.0.0.1:5000/;  # Your Python app (Flask server)
+        proxy_pass http://127.0.0.1:5000/;  # Your API backend server
         proxy_set_header Host $host;
         try_files $uri $uri/ =404;
     }
 
     location /api/ {
-        proxy_pass http://127.0.0.1:5000/api/;  # API routing for Python app
+        proxy_pass http://127.0.0.1:5000/api/;  # Your API endpoint
         proxy_set_header Host $host;
     }
 }
 ```
 
-3. Restart NGINX to apply the changes:
-   ```sh
-   sudo systemctl restart nginx
+### Nginx Setup Steps
+
+1. Install Nginx:
+   ```bash
+   sudo apt update
+   sudo apt install nginx
    ```
 
-### Troubleshooting NGINX
-If you encounter any issues with NGINX not starting:
-- Check the syntax of the configuration:
-  ```sh
-  sudo nginx -t
-  ```
-- Restart the service:
-  ```sh
-  sudo systemctl restart nginx
-  ```
+2. Edit the default Nginx configuration:
+   ```bash
+   sudo nano /etc/nginx/sites-available/default
+   ```
 
-## CI/CD Integration (Optional)
-For continuous integration and deployment (CI/CD), integrate tools such as Jenkins, GitHub Actions, or GitLab CI:
-- Automate testing and deployment to streamline the process.
-- Set up hooks to run tests before pushing changes to production.
-  
-### Example GitHub Actions Workflow
-```yaml
-name: CI/CD Pipeline
+3. Replace the default configuration with the one above, making sure the `proxy_pass` points to your API’s local address.
 
-on:
-  push:
-    branches:
-      - main
+4. Reload Nginx:
+   ```bash
+   sudo systemctl reload nginx
+   ```
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          
-      - name: Run tests
-        run: |
-          python -m unittest discover
-          
-      - name: Deploy to production
-        run: |
-          # Insert deployment script here (e.g., Docker, Heroku, etc.)
-```
+5. Test the configuration:
+   ```bash
+   sudo nginx -t
+   ```
 
-## Usage
-- Modify the `config.yaml` file (if applicable) to suit your environment.
-- Execute the script with any necessary arguments:
-  ```sh
-  python main.py --arg1 value1 --arg2 value2
-  ```
-- Monitor logs to track the script's performance or debug any issues:
-  - Check `app.log` or other log files as configured in the script.
-  - Use monitoring tools such as Prometheus or Grafana for advanced tracking.
+6. Start Nginx:
+   ```bash
+   sudo systemctl start nginx
+   ```
+
+Now, Nginx will reverse proxy requests from `http://<your-server-ip>/api/` to your backend API running on `http://127.0.0.1:5000/`.
+
+## Deployment
+
+To deploy the API to a publicly accessible endpoint, you can use services like:
+- **Heroku** (free tier available)
+- **AWS (Amazon Web Services)** EC2 or Lambda
+- **DigitalOcean** for containerized deployments
+- **Glitch** for quick deployments
+- **Vercel or Netlify** (for Node.js applications)
+
+Ensure the API runs smoothly with fast response times (< 500ms).
+
+## API Testing
+Test the API thoroughly using Postman or similar API testing tools. Use valid and invalid number inputs to verify the expected response formats.
+
+Example test:
+- Valid number: `http://<your-server-ip>:<port>/api/classify-number?number=371`
+- Invalid number: `http://<your-server-ip>:<port>/api/classify-number?number=alphabet`
+
+### Example Tests
+1. **Test a valid Armstrong number**:
+   Request: `/api/classify-number?number=371`
+   Response:
+   ```json
+   {
+       "number": 371,
+       "is_prime": false,
+       "is_perfect": false,
+       "properties": ["armstrong", "odd"],
+       "digit_sum": 11,
+       "fun_fact": "371 is an Armstrong number because 3^3 + 7^3 + 1^3 = 371"
+   }
+   ```
+
+2. **Test an invalid input**:
+   Request: `/api/classify-number?number=hello`
+   Response:
+   ```json
+   {
+       "number": "hello",
+       "error": true
+   }
+   ```
+
+## Code Quality & Best Practices
+
+- **Organized Code Structure**: Code should be logically structured and well-organized with comments where necessary.
+- **Error Handling & Validation**: Ensure proper error handling is in place for unexpected or incorrect inputs.
+- **Avoid Hardcoded Values**: Avoid using hardcoded values for calculations. Use dynamic variables as needed.
 
 ## Contribution
-Feel free to fork this repository, make improvements, and submit a pull request. Contributions are welcome to improve the project further, especially in the areas of automation, CI/CD pipeline enhancements, or NGINX configurations.
+Feel free to fork this repository, make improvements, and submit a pull request. Contributions are welcome, especially in the areas of performance optimization, feature extensions, or improvements to the codebase.
 
 ## License
 This project is licensed under the MIT License.
