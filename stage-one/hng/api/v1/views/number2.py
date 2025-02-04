@@ -1,30 +1,28 @@
-
-#!/usr/bin/python3
-""" Objects that handle all default RestFul API actions for Users """
-from . import app_views
-from flask import abort, jsonify, request
 import math
+from flask import Flask, request, jsonify, abort
 
-@app_views.route('/classify-number', methods=['GET'], strict_slashes=False)
+app = Flask(__name__)
+
+@app.route('/classify-number', methods=['GET'], strict_slashes=False)
 def classify_number():
     # Fetch 'number' from query parameters
     number = request.args.get('number')
-    
+
     # Validate the number parameter
     if number is None:
-        return jsonify({"number": "alphabet", "error": true }), 400
-    
+        return jsonify({"number": None, "error": True, "message": "Missing number parameter"}), 400
+
     try:
         number = int(number)
     except ValueError:
-        return jsonify({"number": "alphabet", "error": true}), 400
-    
+        return jsonify({"number": number, "error": True, "message": "Must be a valid number"}), 400
+
     # Process the number classification
     response = classify_number_logic(number)
     return jsonify(response)
 
 
-# --- Number Classification API ---
+# --- Number Classification Logic ---
 def is_prime(n: int) -> bool:
     if n <= 1:
         return False
@@ -64,6 +62,10 @@ def classify_number_logic(number):
         "is_perfect": is_perfect(number),
         "properties": properties,
         "digit_sum": digit_sum(number),
-        "fun_fact": f"{number} is an Armstrong number because 3^3 + 7^3 + 1^3 = {number}"
+        "fun_fact": f"{number} is an Armstrong number because {digit_sum(number)}"
+        if is_armstrong(number) else None
     }
     return response
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,3 +1,4 @@
+
 # DevOps Stage 1 Task
 
 ## Overview
@@ -14,6 +15,7 @@ This project is part of the DevOps Stage 1 task, utilizing Python to automate an
 - **Bash**: Integration for shell scripting.
 - **Docker (Optional)**: Containerization for deployment.
 - **Git & GitHub**: Version control and collaboration.
+- **NGINX**: Web server for reverse proxy and load balancing.
 
 ## Setup & Installation
 1. Clone the repository:
@@ -33,6 +35,35 @@ This project is part of the DevOps Stage 1 task, utilizing Python to automate an
 4. Run the script:
    ```sh
    python main.py
+   ```
+
+## NGINX Configuration
+To set up reverse proxy with NGINX for your Python app, use the following configuration:
+
+1. Edit your NGINX configuration file (usually found in `/etc/nginx/sites-available/default` or `/etc/nginx/nginx.conf`).
+2. Add the following configuration block:
+
+```nginx
+server {
+    listen 80;
+    server_name 54.165.204.226;  # Replace with your server's IP address
+
+    location / {
+        proxy_pass http://127.0.0.1:5000/;  # Your Python app
+        proxy_set_header Host $host;
+        try_files $uri $uri/ =404;
+    }
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:5000/api/;  # API routing for Python app
+        proxy_set_header Host $host;
+    }
+}
+```
+
+3. Restart NGINX to apply the changes:
+   ```sh
+   sudo systemctl restart nginx
    ```
 
 ## Usage
