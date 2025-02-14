@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const Ticket = ({ selectedPage, setSelectedPage, selectedTicket, setSelectedTicket, tickets, handleSubmit }) => {
-  const [ticketCount, setTicketCount] = useState(1);
+const Ticket = ({ selectedPage,ticketCount, setTicketCount, setSelectedPage, selectedTicket, setSelectedTicket, tickets, handleSubmit }) => {
+ 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -11,6 +11,7 @@ const Ticket = ({ selectedPage, setSelectedPage, selectedTicket, setSelectedTick
       setErrors({ ticket: "Please select a ticket type." });
       return;
     }
+    console.log(selectedTicket, ticketCount)
     setSelectedPage("profile");
   };
 

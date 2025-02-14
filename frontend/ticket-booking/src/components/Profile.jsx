@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Profile = ({ selectedTicket, ticketCount, handleSubmit }) => {
+const Profile = ({ selectedTicket,setSelectedPage, ticketCount, handleSubmit }) => {
   // Retrieve user details from localStorage
   const [fullName, setFullName] = useState(localStorage.getItem("fullName") || "");
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
@@ -53,6 +53,7 @@ const Profile = ({ selectedTicket, ticketCount, handleSubmit }) => {
     handleSubmit(formData);
     console.log("Form Data Submitted:", formData);
     setShowSuccess(true);
+    setSelectedPage("tickets")
   };
 
   return (
